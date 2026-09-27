@@ -1,0 +1,115 @@
+---
+title: "P8105 HW1"
+author: "Ruoqi Wang"
+date: "2026-09-27"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+
+```{r}
+data("penguins", package = "palmerpenguins")
+```
+
+
+## Problem 1
+The `penguins` dataset contains information on penguins observed in the Palmer Archipelago. The dataset includes three species: Adelie, Chinstrap, and Gentoo. Important variables include `species`, `island`, `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, `body_mass_g`, `sex`, and `year`.
+The dataset contains `r nrow(penguins)` observations and `r ncol(penguins)` variables.
+The mean flipper length is `r mean(penguins$flipper_length_mm, na.rm = TRUE)` mm.
+
+
+```{r}
+penguin_plot <- ggplot(
+  penguins,
+  aes(
+    x = bill_length_mm,
+    y = flipper_length_mm,
+    color = species
+  )
+) +
+  geom_point()
+
+penguin_plot
+
+ggsave(
+  "p1_scatterplot.png",
+  plot = penguin_plot,
+  width = 6,
+  height = 4
+)
+```
+
+
+## Problem 2
+
+
+```{r}
+set.seed(123)
+
+normal_sample <- rnorm(10)
+
+positive_sample <- normal_sample > 0
+
+character_sample <- c(
+  "one", "two", "three", "four", "five",
+  "six", "seven", "eight", "nine", "ten"
+)
+
+factor_sample <- factor(
+  c(
+    "level1", "level2", "level3", "level1", "level2",
+    "level3", "level1", "level2", "level3", "level1"
+  )
+)
+
+problem_2_df <- tibble(
+  normal_sample,
+  positive_sample,
+  character_sample,
+  factor_sample
+)
+```
+
+
+```{r}
+mean(pull(problem_2_df, normal_sample))
+mean(pull(problem_2_df, positive_sample))
+mean(pull(problem_2_df, character_sample))
+mean(pull(problem_2_df, factor_sample))
+```
+
+
+```{r, results="hide", warning=FALSE}
+as.numeric(pull(problem_2_df, positive_sample))
+as.numeric(pull(problem_2_df, character_sample))
+as.numeric(pull(problem_2_df, factor_sample))
+```
+
+
+The logical vector is converted to numeric values, with TRUE becoming 1 and FALSE becoming 0. The character vector cannot be converted to numeric values because its elements are words rather than numbers, resulting in NA values. The factor vector is converted to the underlying integer codes for its levels, with the three levels represented by 1, 2, and 3. These results explain why the mean can be calculated for the logical vector but not directly for the character or factor vectors.
+
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
